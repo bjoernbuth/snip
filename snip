@@ -174,12 +174,13 @@ readonly COLUMN_FILTER_LONG_CMD=("cat")
 readonly COLUMN_BASE_LONG_CMD=(
   "column"
   "--table"
-  "--table-columns-limit=4"
   "--separator=|"
   "--output-separator=|"
   "--table-column=name=HOST"
   "--table-column=name=TIMESTAMP"
   "--table-column=name=DESCRIPTION")
+
+# "--table-columns-limit=4"
 
 readonly COLUMN_FIND_LONG_CMD=(
   "${COLUMN_BASE_LONG_CMD[@]}"
@@ -198,10 +199,11 @@ readonly COLUMN_FILTER_CMD=("cut" "-d" "|" "-f" "3-")
 readonly COLUMN_BASE_CMD=(
   "column"
   "--table"
-  "--table-columns-limit=2"
   "--separator=|"
   "--output-separator=|"
   "--table-column=name=DESCRIPTION")
+
+# "--table-columns-limit=2"
 
 readonly COLUMN_LIST_CMD=(
   "${COLUMN_BASE_CMD[@]}"
