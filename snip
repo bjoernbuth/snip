@@ -428,6 +428,14 @@ function find() {
     fzfcmd+=("-q" "${query}")
   fi
 
+# finding out the fzf command
+echo "fzf command: ${fzfcmd[@]}"
+read -p "Press enter to continue"
+exit 1
+# result
+# fzf --no-multi --ansi --header-lines=1 --preview cut -d'|' -f4- <<< {} | less  {}
+# aha (...cut wrong)
+
   cat "${DB_PREFIX}".* |
     "${host_filter_cmd[@]}" |
     "${column_filter_cmd[@]}" |
@@ -565,21 +573,25 @@ function get_snippet_formatter() {
   ret=("fold" "-sw" "\${FZF_PREVIEW_COLUMNS}")
 
   # Use batcat if present.
-  for sf in "bat" "batcat"; do
+  for sf in "bat"; do
+  # for sf in "bat" "batcat"; do
     if type -p "${sf}" >&/dev/null; then
       # shellcheck disable=SC2034
+      # this might need changes (bjoern)
       ret=(
         "${sf}"
-        "--theme=\"${BAT_THEME}\""
-        "--wrap=character"
-        "--terminal-width=\"\${FZF_PREVIEW_COLUMNS}\""
         "--color=always"
         "--language=bash"
+        "--wrap=character"
       )
       break
     fi
   done
 }
+
+        # "--theme=\"${BAT_THEME}\""
+        # "--terminal-width=\"\${FZF_PREVIEW_COLUMNS}\""
+
 
 # get_fzf_cmd - Return a suitable fzf command.
 #
@@ -589,6 +601,20 @@ function get_snippet_formatter() {
 function get_fzf_cmd() {
   local -n fzf_cmd_ref="${1?}"
   local -n formatter_ref="${2?}"
+
+# show $formatter_ref
+echo "formatter_ref before change: ${formatter_ref[@]}"
+read -p "Press enter to continue"
+
+# result was
+# bat --color=always --language=bash
+unset $formatter_ref
+
+#formatter_ref=( "bat" "--color=always" )
+
+# try02
+# formatter_ref=( "bat" "--language=bash" "{}" )
+formatter_ref=( "less " "{}" )
 
   # shellcheck disable=SC2034
   fzf_cmd_ref=(
@@ -600,6 +626,12 @@ function get_fzf_cmd() {
     "cut -d'|' -f4- <<< {} | ${formatter_ref[*]}"
   )
 }
+
+# the change line
+#   "cut -d'|' -f4- <<< {} | ${formatter_ref[*]}"
+
+# try01
+# "cut -d'|' -f4- <<< {} | bat --color=always "
 
 # git_local_changes - return true if there are changes to be submitted
 # in the local repo (current directory).
