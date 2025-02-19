@@ -565,7 +565,8 @@ function get_snippet_formatter() {
   ret=("fold" "-sw" "\${FZF_PREVIEW_COLUMNS}")
 
   # Use batcat if present.
-  for sf in "bat" "batcat"; do
+  for sf in "bat"; do
+  # for sf in "bat" "batcat"; do
     if type -p "${sf}" >&/dev/null; then
       # shellcheck disable=SC2034
       ret=(
