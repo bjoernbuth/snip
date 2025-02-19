@@ -428,6 +428,14 @@ function find() {
     fzfcmd+=("-q" "${query}")
   fi
 
+# finding out the fzf command
+echo "fzf command: ${fzfcmd[@]}"
+read -p "Press enter to continue"
+exit 1
+# result
+# fzf --no-multi --ansi --header-lines=1 --preview cut -d'|' -f4- <<< {} | less  {}
+# aha (...cut wrong)
+
   cat "${DB_PREFIX}".* |
     "${host_filter_cmd[@]}" |
     "${column_filter_cmd[@]}" |
@@ -574,6 +582,7 @@ function get_snippet_formatter() {
         "${sf}"
         "--color=always"
         "--language=bash"
+        "--wrap=character"
       )
       break
     fi
@@ -581,7 +590,6 @@ function get_snippet_formatter() {
 }
 
         # "--theme=\"${BAT_THEME}\""
-        # "--wrap=character"
         # "--terminal-width=\"\${FZF_PREVIEW_COLUMNS}\""
 
 
@@ -605,9 +613,8 @@ unset $formatter_ref
 #formatter_ref=( "bat" "--color=always" )
 
 # try02
-# formatter_ref=( "bat" "--color=always" )
-
-formatter_ref=( "cat" )
+# formatter_ref=( "bat" "--language=bash" "{}" )
+formatter_ref=( "less " "{}" )
 
   # shellcheck disable=SC2034
   fzf_cmd_ref=(
